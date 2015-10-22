@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JColorChooser;
@@ -102,4 +104,62 @@ public class GUI extends JFrame
 		
 		validate();
 	}
+	
+	public void createLine()
+	{
+		
+	}
+	
+	public void createRectangle()
+	{
+		
+	}
+	
+	public void createOval()
+	{
+		
+	}
+	
+	public void createImage()
+	{
+		
+	}
+	
+	private class createLineListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			createLine();
+		}	
+	}
+	
+	private class createRectangleListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			createRectangle();
+		}
+	}
+	
+	private class createOvalListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			createOval();
+		}
+	}
+	
+	private class createImageListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			createImage();
+		}	
+	}
+	
+	
 }
