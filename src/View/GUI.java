@@ -7,10 +7,14 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -104,62 +108,59 @@ public class GUI extends JFrame
 		
 		validate();
 	}
-	
-	public void createLine()
-	{
 		
-	}
-	
-	public void createRectangle()
+	private class objectCreation implements MouseListener
 	{
-		
-	}
-	
-	public void createOval()
-	{
-		
-	}
-	
-	public void createImage()
-	{
-		
-	}
-	
-	private class createLineListener implements ActionListener
-	{
+		private Point startPoint = null;
+		private Point endPoint = null;
 		@Override
-		public void actionPerformed(ActionEvent e)
+		public void mouseClicked(MouseEvent e)
 		{
-			createLine();
-		}	
-	}
-	
-	private class createRectangleListener implements ActionListener
-	{
+			
+		}
+
 		@Override
-		public void actionPerformed(ActionEvent e)
+		public void mousePressed(MouseEvent e)
 		{
-			createRectangle();
+			if(radioButtons.isSelected((ButtonModel) line))
+			{
+				startPoint.setLocation(e.getX(), e.getY());
+			}
+			else if(radioButtons.isSelected((ButtonModel) rectangle))
+			{
+				startPoint.setLocation(e.getX(), e.getX());
+			}
+			else if(radioButtons.isSelected((ButtonModel) oval))
+			{
+				startPoint.setLocation(e.getX(), e.getY());
+			}
+			else if(radioButtons.isSelected((ButtonModel) image))
+			{
+				startPoint.setLocation(e.getX(), e.getY());
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			if(radioButtons.isSelected((ButtonModel) line))
+			{
+				endPoint.setLocation(e.getX(), e.getY());
+			}
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
 		}
 	}
-	
-	private class createOvalListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			createOval();
-		}
-	}
-	
-	private class createImageListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			createImage();
-		}	
-	}
-	
-	
 }
