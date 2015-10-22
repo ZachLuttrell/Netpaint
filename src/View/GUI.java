@@ -83,6 +83,6 @@ public class GUI extends JFrame
 		rectangle.setText("Rectangle");
 		oval.setText("Circle");
 		image.setText("Image");
-		//TEst comments
+		//test....
 	}
 }
