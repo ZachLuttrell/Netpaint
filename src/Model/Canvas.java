@@ -51,7 +51,6 @@ public class Canvas extends JPanel {
 				
 					//IMAGE
 					g2.drawImage(p.getImage(), p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY(), null);
-			
 				}
 			}
 		}
