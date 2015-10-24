@@ -31,5 +31,6 @@ public class Picture extends PaintObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		super.setImage(image);
 	}
 }

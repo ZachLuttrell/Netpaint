@@ -160,7 +160,8 @@ public class GUI extends JFrame
 					object.setShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
 					break;
 				case 3:
-					//object.setImage(object.getImage());
+					object.setEndX(e.getX());
+					object.setEndY(e.getY());
 					break;
 				}
 				
@@ -212,7 +213,7 @@ public class GUI extends JFrame
 			{
 				drawing = false;
 				System.out.println("Second click is done");
-				if(line.isSelected())
+				/*if(line.isSelected())
 				{
 					paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()));
 				}
@@ -227,7 +228,7 @@ public class GUI extends JFrame
 				else if(image.isSelected())
 				{
 					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()));
-				}
+				}*/
 			}
 		}
 
