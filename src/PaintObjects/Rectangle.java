@@ -12,21 +12,21 @@ public class Rectangle extends PaintObject {
 	
 	public Rectangle(Graphics graphic, int startX, int startY, int endX, int endY, Color color){
 		//Initialize fields
-		setGraphics((Graphics2D)graphic);
-		setStartX(startX);
-		setStartY(startY);
-		setEndX(endX);
-		setEndY(endY);
-		setColor(color);
-		setImage(null);
-		setObjectType(1);
+		super.setGraphics((Graphics2D)graphic);
+		super.setStartX(startX);
+		super.setStartY(startY);
+		super.setEndX(endX);
+		super.setEndY(endY);
+		super.setColor(color);
+		super.setImage(null);
+		super.setObjectType(1);
 		
 		//Initialize shape
 		int height, width;
 		height = endY - startY;
 		width = endX - startX;
 		rectangle = new Rectangle2D.Double(startX, startY, width, height);
-		setShape(rectangle);
+		super.setShape(rectangle);
 		
 	}	
 }

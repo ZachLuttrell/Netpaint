@@ -39,8 +39,8 @@ class DrawingPanel extends JPanel {
     // Any drawing later will be in this new Color
     g2.setColor(Color.RED);
     // Create a polygon and draw it. Points are 100,600  200,700  200,110  400,120
-    int[] xPoints = { 100, 200, 300, 400 };
-    int[] yPoints = { 600, 700, 110, 120 };
+    int[] xPoints = { 200, 800, 300, 400 };
+    int[] yPoints = { 800, 700, 110, 120 };
     g2.fillPolygon(xPoints, yPoints, 4);
 
     g2.setColor(Color.BLUE);

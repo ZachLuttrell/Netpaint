@@ -16,14 +16,14 @@ public class Picture extends PaintObject {
 	
 	public Picture(Graphics graphic, int startX, int startY, int endX, int endY, Color color){
 		//Initialize fields
-		setGraphics((Graphics2D)graphic);
-		setStartX(startX);
-		setStartY(startY);
-		setEndX(endX);
-		setEndY(endY);
-		setColor(color);
-		setShape(null);
-		setObjectType(3);
+		super.setGraphics((Graphics2D)graphic);
+		super.setStartX(startX);
+		super.setStartY(startY);
+		super.setEndX(endX);
+		super.setEndY(endY);
+		super.setColor(color);
+		super.setShape(null);
+		super.setObjectType(3);
 
 		//Initialize image
 		try {
@@ -32,12 +32,4 @@ public class Picture extends PaintObject {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void draw(){
-		graphic.drawImage(image, startX, startY, endX, endY, null);
-		
-		//graphic.draw((Shape) image); //Other idea
-	}
-	
 }

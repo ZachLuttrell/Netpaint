@@ -12,20 +12,20 @@ public class Oval extends PaintObject {
 	
 	public Oval(Graphics graphic, int startX, int startY, int endX, int endY, Color color){
 		//Initialize fields
-		setGraphics((Graphics2D)graphic);
-		setStartX(startX);
-		setStartY(startY);
-		setEndX(endX);
-		setEndY(endY);
-		setColor(color);
-		setImage(null);
-		setObjectType(2);
+		super.setGraphics((Graphics2D)graphic);
+		super.setStartX(startX);
+		super.setStartY(startY);
+		super.setEndX(endX);
+		super.setEndY(endY);
+		super.setColor(color);
+		super.setImage(null);
+		super.setObjectType(2);
 		
 		//Initialize shape
 		int height, width;
 		height = endY - startY;
 		width = endX - startX;
 		oval = new Ellipse2D.Double(startX, startY, width, height);
-		setShape(oval);
+		super.setShape(oval);
 	}
 }
