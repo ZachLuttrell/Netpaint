@@ -157,10 +157,7 @@ public class GUI extends JFrame
 			if(drawing){
 				endPoint.setLocation(e.getX(), e.getY());
 				objects = paintPanel.getPaintObjects();
-				System.out.println(objects.size());
 				object = objects.get(objects.size()-1);
-				System.out.println(e.getX() + ", " + e.getY());
-
 				
 				switch(object.getObjectType()){
 				case 0:
@@ -173,8 +170,8 @@ public class GUI extends JFrame
 					object.setShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
 					break;
 				case 3:
-					object.setEndX(e.getX());
-					object.setEndY(e.getY());
+					object.setEndX((int)endPoint.getX()-(int)startPoint.getX());
+					object.setEndY((int)endPoint.getY()-(int)startPoint.getY());
 					break;
 				}
 				
@@ -200,48 +197,26 @@ public class GUI extends JFrame
 				if(line.isSelected())
 				{
 					paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					System.out.println("Paint object array: " + paintPanel.getPaintObjects().toString());
 				}
 				else if(rectangle.isSelected())
 				{
 					paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					System.out.println("Paint object array: " + paintPanel.getPaintObjects().toString());
-
 				}
 				else if(oval.isSelected())
 				{
 					paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					System.out.println("Paint object array: " + paintPanel.getPaintObjects().toString());
+					
 
 				}
 				else if(image.isSelected())
 				{
-					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					System.out.println("Paint object array: " + paintPanel.getPaintObjects().toString());
-
+					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
 				}
 				
 			}
 			else // Second Click
 			{
 				drawing = false;
-				System.out.println("Second click is done");
-				/*if(line.isSelected())
-				{
-					paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()));
-				}
-				else if(rectangle.isSelected())
-				{
-					paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()));
-				}
-				else if(oval.isSelected())
-				{
-					paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()));
-				}
-				else if(image.isSelected())
-				{
-					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()));
-				}*/
 			}
 		}
 

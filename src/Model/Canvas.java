@@ -45,8 +45,6 @@ public class Canvas extends JPanel {
 					g2.setColor(p.getColor());
 					g2.draw(p.getShape());
 					g2.fill(p.getShape());
-					System.out.println(p.getShape());
-					System.out.println("Image should be drawn what the fuck");
 				} else {
 				
 					//IMAGE
