@@ -24,7 +24,7 @@ public class Picture extends PaintObject {
 		super.setColor(color);
 		super.setShape(null);
 		super.setObjectType(3);
-
+		
 		//Initialize image
 		try {
 			image = ImageIO.read(new File("Image/GratefulDeadSkeleton.jpg"));

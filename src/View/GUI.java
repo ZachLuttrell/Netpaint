@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,6 +24,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import Model.Canvas;
 import PaintObjects.Line;
@@ -45,6 +48,8 @@ public class GUI extends JFrame
 	private JRadioButton image = new JRadioButton();
 	
 	public JColorChooser colorChooser = new JColorChooser();
+	
+	public JScrollPane scrollPane = new JScrollPane(paintPanel);
 	
 	public Point startPoint = new Point();
 	public Point endPoint = new Point();
@@ -70,6 +75,9 @@ public class GUI extends JFrame
 
 	public void layoutTheGUI()
 	{
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    int screenSizeWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	    
 		GridBagConstraints cont;
 		cont = new GridBagConstraints();
 		
@@ -79,9 +87,9 @@ public class GUI extends JFrame
 		cont.weighty = 2;
 		cont.gridx = 0;
 		cont.gridy = 0;
-		
-		this.setTitle("NetPaint Client");
-		this.setSize(900, 900);
+
+	    this.setTitle("NetPaint Client");
+		this.setBounds(0,0,screenSize.width, screenSize.height);
 		this.setLocation(0, 0);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new FlowLayout());
@@ -89,13 +97,16 @@ public class GUI extends JFrame
 		this.setFocusable(true);
 		this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		
-		paintPanel.setPreferredSize(new Dimension(900, 425));
-		// paintPanel.setLocation(0, 0);
+		paintPanel.setPreferredSize(new Dimension(2048, 1024));
 		paintPanel.setBackground(Color.WHITE);
 		paintPanel.setVisible(true);
 		
-		radioPanel.setPreferredSize(new Dimension(900, 50));
-		// radioPanel.setLocation(0, 425);
+		scrollPane.setPreferredSize(new Dimension(screenSizeWidth, 425));
+		scrollPane.setViewportView(paintPanel);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		radioPanel.setPreferredSize(new Dimension(screenSizeWidth, 50));
 		radioPanel.setVisible(true);
 		
 		radioButtons.add(line);
@@ -108,14 +119,16 @@ public class GUI extends JFrame
 		radioPanel.add(oval);
 		radioPanel.add(image);
 		
-		swatchPanel.setPreferredSize(new Dimension(900, 425));
+		swatchPanel.setPreferredSize(new Dimension(screenSizeWidth, 425));
 		swatchPanel.setVisible(true);
 		swatchPanel.add(colorChooser);
-		colorChooser.setPreferredSize(new Dimension(900, 300));
+		colorChooser.setPreferredSize(new Dimension(screenSizeWidth, 300));
 		
-		this.add(paintPanel);
+		// this.add(paintPanel);
+		this.add(scrollPane);
 		this.add(radioPanel);
 		this.add(swatchPanel);
+		
 		
 		line.setText("Line");
 		rectangle.setText("Rectangle");
