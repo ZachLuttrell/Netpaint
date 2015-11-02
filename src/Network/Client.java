@@ -22,6 +22,7 @@ public class Client extends JFrame
 {
 
 	private static final String ADDRESS = "localhost";
+	
 
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
