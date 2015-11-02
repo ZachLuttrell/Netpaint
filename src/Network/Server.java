@@ -8,12 +8,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import Model.Canvas;
+
 public class Server
 {
 	public static final int SERVER_PORT = 9001;
 
 	private static ServerSocket sock;
 	private static List<ObjectOutputStream> clients = new ArrayList<ObjectOutputStream>();
+	private Canvas serverCanvas;
 
 	public static void main(String[] args) throws IOException
 	{
@@ -39,6 +42,10 @@ public class Server
 			System.out.println("Accepted a new connection from " + s.getInetAddress());
 		}
 	}
+	
+	public Canvas getCanvas(){ return serverCanvas; }
+	
+	public void setCanvas(Canvas updatedCanvas){ serverCanvas = updatedCanvas; }
 }
 
 class ClientHandler extends Thread
