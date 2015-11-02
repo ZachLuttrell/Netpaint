@@ -16,13 +16,14 @@ public class Server
 
 	private static ServerSocket sock;
 	private static List<ObjectOutputStream> clients = new ArrayList<ObjectOutputStream>();
-	private Canvas serverCanvas;
+	public static Canvas serverCanvas;
 
 	public static void main(String[] args) throws IOException
 	{
 		sock = new ServerSocket(SERVER_PORT);
 		System.out.println("Server started on port " + SERVER_PORT);
-
+		serverCanvas = new Canvas(null);
+		
 		while (true)
 		{
 			// TODO 1: Accept a connection from the ServerSocket.
@@ -36,28 +37,32 @@ public class Server
 			clients.add(os);
 
 			// TODO 3: Start a new ClientHandler thread for this client.
-			ClientHandler clientHandler = new ClientHandler(is, clients);
+			ClientHandler clientHandler = new ClientHandler(is, serverCanvas, (ArrayList<ObjectOutputStream>) clients);
 			clientHandler.start();
-
+			
 			System.out.println("Accepted a new connection from " + s.getInetAddress());
+			
 		}
 	}
-	
-	public Canvas getCanvas(){ return serverCanvas; }
-	
-	public void setCanvas(Canvas updatedCanvas){ serverCanvas = updatedCanvas; }
+
+	public void updateServerCanvas() {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 class ClientHandler extends Thread
 {
 
 	ObjectInputStream input;
-	List<ObjectOutputStream> clients;
+	Canvas canvas;
+	ArrayList<ObjectOutputStream> clients;
 
-	public ClientHandler(ObjectInputStream input, List<ObjectOutputStream> clients)
+	public ClientHandler(ObjectInputStream input, Canvas canvas, ArrayList<ObjectOutputStream> clientList)
 	{
+		clients = clientList;
 		this.input = input;
-		this.clients = clients;
+		this.canvas = canvas;
 	}
 
 	@Override
@@ -65,7 +70,31 @@ class ClientHandler extends Thread
 	{
 		while (true)
 		{
+			try {
+				canvas = (Canvas) input.readObject();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
+			updateClientCanvases();
+		}
+	}
+
+	private void updateClientCanvases() {
+		// TODO Auto-generated method stub
+		System.out.println("Trying to write the server's canvas to each client");
+		for(ObjectOutputStream os : clients){
+			try {
+				os.writeObject(canvas);
+				System.out.println("Server canvas has been written to a client");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
