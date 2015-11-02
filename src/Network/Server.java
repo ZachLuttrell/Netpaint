@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Server
@@ -59,39 +58,7 @@ class ClientHandler extends Thread
 	{
 		while (true)
 		{
-
-			String s = null;
-
-			// TODO 4: Read a String from the client
-			try
-			{
-				s = (String) input.readObject();
-				writeStringToClients(s);
-			} catch (ClassNotFoundException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void writeStringToClients(String s)
-	{
-		// TODO 5: Send a string to all clients in the client list
-		for (ObjectOutputStream os : clients)
-		{
-			try
-			{
-				os.writeObject(s);
-			} catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 		}
 	}
 
