@@ -17,16 +17,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import Model.Canvas;
+import View.GUI;
+
 @SuppressWarnings("serial")
 public class Client extends JFrame
 {
-
 	private static final String ADDRESS = "localhost";
+	public static Canvas canvas;
+	public static GUI gui;
 	
-
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
-		
+		canvas = new Canvas(null);
+		gui = new GUI();
 	}
 
 	Socket socket;
