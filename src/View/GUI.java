@@ -28,6 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import Model.Canvas;
+import Network.Client;
+import Network.Server;
 import PaintObjects.Line;
 import PaintObjects.Oval;
 import PaintObjects.PaintObject;
@@ -55,6 +57,9 @@ public class GUI extends JFrame
 	public Point endPoint = new Point();
 	
 	public boolean drawing = false;
+	
+	public Client client;
+	public Server server;
 	
 	public static void main(String[] args)
 	{
@@ -217,7 +222,16 @@ public class GUI extends JFrame
 			else // Second Click
 			{
 				drawing = false;
+				System.out.println("Second Click : Try and update the server canvas");
+				updateServerCanvas();
 			}
+		}
+
+		private void updateServerCanvas() {
+			// TODO Auto-generated method stub
+			System.out.println("Trying to push the canvas");
+			server.updateServerCanvas();
+			// client.updateServerCanvas();
 		}
 
 		@Override

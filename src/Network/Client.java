@@ -17,16 +17,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import Model.Canvas;
+import View.GUI;
+
 @SuppressWarnings("serial")
 public class Client extends JFrame
 {
 
 	private static final String ADDRESS = "localhost";
-	
+	public static Canvas clientCanvas;
+	public static GUI clientGUI;
 
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
-		
+		clientGUI = new GUI();
+		clientCanvas = new Canvas(clientGUI);
 	}
 
 	Socket socket;
@@ -41,7 +46,7 @@ public class Client extends JFrame
 		ServerListener s = new ServerListener();
 		s.start();
 	}
-
+	
 	private void openConnection()
 	{
 		/* Our server is on our computer, but make sure to use the same port. */
@@ -58,6 +63,18 @@ public class Client extends JFrame
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateServerCanvas(){
+		System.out.println("Trying to write to the server's canvas");
+		try {
+			oos.writeObject(clientCanvas);
+			System.out.println("Canvas has been written to server");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Canvas didn't make it to server");
+			e.printStackTrace();
+		}
+	}
 
 	private class ServerListener extends Thread
 	{
@@ -65,9 +82,17 @@ public class Client extends JFrame
 		@Override
 		public void run()
 		{
-			// TODO 9: Repeatedly accept String objects from the server and add
-			// them to our model.
-			
+			try {
+				System.out.println("Trying to read a canvas from the server");
+				clientCanvas = (Canvas) ois.readObject();
+				System.out.println("canvas read from the server");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
