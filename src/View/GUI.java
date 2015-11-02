@@ -192,7 +192,7 @@ public class GUI extends JFrame
 				drawing = true;
 				startPoint.setLocation(e.getX(), e.getY());
 			
-				//Check
+				
 				
 				if(line.isSelected())
 				{
@@ -205,8 +205,6 @@ public class GUI extends JFrame
 				else if(oval.isSelected())
 				{
 					paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					
-
 				}
 				else if(image.isSelected())
 				{
