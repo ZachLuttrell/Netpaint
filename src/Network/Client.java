@@ -17,7 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.sun.webkit.ThemeClient;
+
 import Model.Canvas;
+import PaintObjects.DrawingObjects;
+import PaintObjects.PaintObject;
 import View.GUI;
 
 @SuppressWarnings("serial")
@@ -27,37 +31,28 @@ public class Client extends JFrame
 
 	public Canvas clientCanvas;
 	public GUI clientGUI;
-<<<<<<< HEAD
-
+	public DrawingObjects paintObject;
+	
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
 		Client theClient;
-		theClient = new Client("client_name");
+		theClient = new Client();
 		theClient.clientGUI = new GUI(theClient);
 		theClient.clientCanvas = theClient.clientGUI.getCanvas();
-=======
-	Client thisClient;
-
-	public static void main(String[] args) throws UnknownHostException, IOException
-	{
-	Client theClient;
-	theClient = new Client("client_name");
-	theClient.clientGUI = new GUI(theClient);
-	theClient.clientCanvas = theClient.clientGUI.getCanvas();
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 	}
 
 	Socket socket;
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 
-	public Client(String username) throws UnknownHostException, IOException
+	public Client() throws UnknownHostException, IOException
 	{
 		openConnection();
 
 		// TODO 7: Start a new ServerListener thread
 		ServerListener s = new ServerListener();
 		s.start();
+		System.out.println("Server Listener Started");
 	}
 	
 	private void openConnection()
@@ -77,44 +72,40 @@ public class Client extends JFrame
 		}
 	}
 	
-<<<<<<< HEAD
-	public void updateServerCanvas(Canvas inputCanvas){
-//		clientCanvas = inputCanvas;
-		System.out.println("Trying to write to the server's canvas");
-		System.out.println(inputCanvas);
+	public void updateServerCanvas(DrawingObjects inputObject){
+		paintObject = inputObject;
+		System.out.println("Trying to write the server's object");
+		System.out.println(paintObject);
 		try {
-			oos.writeObject(inputCanvas);
-=======
-	public void updateServerCanvas(Object inputPO){
-		System.out.println("Trying to write to the server's canvas");
-		System.out.println(inputPO);
-		try {
-			oos.writeObject(inputPO);
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
-			System.out.println("Canvas has been written to server");
+			oos.writeObject(paintObject);
+			System.out.println("Object has been written to server");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Canvas didn't make it to server");
+			System.out.println("Object didn't make it to server");
 			e.printStackTrace();
 		}
 	}
 
 	private class ServerListener extends Thread
 	{
-
 		@Override
 		public void run()
 		{
+			while(true)
+			{
 			try {
-				System.out.println("Trying to read a canvas from the server");
-				clientCanvas = (Canvas) ois.readObject();
-				System.out.println("canvas read from the server");
+				System.out.println("Trying to read a object from the server");
+				paintObject = (DrawingObjects) ois.readObject();
+				System.out.println("Read it in succesfully");
+				clientGUI.clientDrawing(paintObject);
+				System.out.println("Should be drawn?");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
 			}
 		}
 	}

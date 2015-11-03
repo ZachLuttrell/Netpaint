@@ -4,14 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
-<<<<<<< HEAD
 import java.io.Serializable;
 
 public class Line extends PaintObject implements Serializable{
-=======
-
-public class Line extends PaintObject {
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 	
 	private Shape line;
 	

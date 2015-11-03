@@ -30,6 +30,7 @@ import javax.swing.ScrollPaneConstants;
 import Model.Canvas;
 import Network.Client;
 import Network.Server;
+import PaintObjects.DrawingObjects;
 import PaintObjects.Line;
 import PaintObjects.Oval;
 import PaintObjects.PaintObject;
@@ -61,29 +62,13 @@ public class GUI extends JFrame
 	public Client client;
 	public Server server;
 	
-<<<<<<< HEAD
-//	public static void main(String[] args)
-//	{
-//		new GUI().setVisible(true);
-//	}
+	public DrawingObjects drawObjects;
 	
 	public GUI(Client theClient)
 	{
 		client = theClient;
 		layoutTheGUI();
 		registerListeners();
-=======
-	// public static void main(String[] args)
-	// {
-	//  	new GUI("").setVisible(true);
-	// }
-	
-	public GUI(Client theClient)
-	{
-	client = theClient;
-	layoutTheGUI();
-	registerListeners();
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 	}
 	
 	private void registerListeners()
@@ -205,6 +190,34 @@ public class GUI extends JFrame
 		return paintPanel;
 	}
 	
+	public void clientDrawing(DrawingObjects inputDrawObject)
+	{
+		System.out.println("it got into client drawing :)");
+		if(inputDrawObject.getType() == 0)
+		{
+			paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+			paintPanel.setVisible(true);
+			System.out.println("Should have added it to the paint panel/canvas");
+		}
+		else if(inputDrawObject.getType() == 1)
+		{
+			paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+			paintPanel.setVisible(true);
+		}
+		else if(inputDrawObject.getType() == 2)
+		{
+			paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+			paintPanel.setVisible(true);
+		}
+		else if(inputDrawObject.getType() == 3)
+		{
+			paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
+			paintPanel.setVisible(true);
+		}
+		paintPanel.repaint();
+		System.out.println("hopefully it fucking repainted");
+	}
+	
 	private class objectCreation implements MouseListener
 	{
 		
@@ -215,28 +228,26 @@ public class GUI extends JFrame
 				//Assign start coordinates
 				drawing = true;
 				startPoint.setLocation(e.getX(), e.getY());
-<<<<<<< HEAD
 			
-				
-=======
-
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
-				
 				if(line.isSelected())
 				{
 					paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+					drawObjects = new DrawingObjects(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(rectangle.isSelected())
 				{
 					paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+					drawObjects = new DrawingObjects(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(oval.isSelected())
 				{
 					paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+					drawObjects = new DrawingObjects(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(image.isSelected())
 				{
 					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
+					drawObjects = new DrawingObjects(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
 				}
 				
 			}
@@ -244,31 +255,17 @@ public class GUI extends JFrame
 			{
 				drawing = false;
 				System.out.println("Second Click : Try and update the server canvas");
-<<<<<<< HEAD
-				updateServerCanvas(paintPanel);
+				updateServerCanvas(drawObjects);
 			}
 		}
 
-		private void updateServerCanvas(Canvas inputCanvas) {
+		private void updateServerCanvas(DrawingObjects inputObject) {
 			// TODO Auto-generated method stub
+			drawObjects = (DrawingObjects) inputObject;
 			System.out.println("Trying to push the canvas");
-			System.out.println(inputCanvas.getPaintObjects());
-			// server.updateServerCanvas();
-			client.updateServerCanvas(inputCanvas);
-=======
-				updateServerCanvas(paintPanel.getPaintObjects());
-			}
+			client.updateServerCanvas(drawObjects);
 		}
-
-		private void updateServerCanvas(Object inputPO) {
-			// TODO Auto-generated method stub
-			System.out.println("Trying to push the canvas");
-			System.out.println(inputPO);
-			// server.updateServerCanvas();
-			client.updateServerCanvas(inputPO);
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
-		}
-
+		
 		@Override
 		public void mousePressed(MouseEvent e)
 		{

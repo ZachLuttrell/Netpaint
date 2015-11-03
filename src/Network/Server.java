@@ -9,18 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Canvas;
-<<<<<<< HEAD
-=======
-import PaintObjects.PaintObject;
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
+import PaintObjects.DrawingObjects;
 
 public class Server
 {
 	public static final int SERVER_PORT = 9001;
 
 	private static ServerSocket sock;
+	private static Canvas serverCanvas;
 	private static List<ObjectOutputStream> clients = new ArrayList<ObjectOutputStream>();
-	public static Canvas serverCanvas;
+	public static DrawingObjects paintObject;
 
 	public static void main(String[] args) throws IOException
 	{
@@ -41,7 +39,7 @@ public class Server
 			clients.add(os);
 
 			// TODO 3: Start a new ClientHandler thread for this client.
-			ClientHandler clientHandler = new ClientHandler(is, serverCanvas, (ArrayList<ObjectOutputStream>) clients);
+			ClientHandler clientHandler = new ClientHandler(is, paintObject, (ArrayList<ObjectOutputStream>) clients);
 			clientHandler.start();
 			
 			System.out.println("Accepted a new connection from " + s.getInetAddress());
@@ -59,15 +57,15 @@ class ClientHandler extends Thread
 {
 
 	ObjectInputStream input;
-	Canvas canvas;
+	DrawingObjects paintObject;
 	ArrayList<ObjectOutputStream> clients;
 
-	public ClientHandler(ObjectInputStream input, Canvas canvas, ArrayList<ObjectOutputStream> clientList)
+	public ClientHandler(ObjectInputStream input, DrawingObjects inputPaintObject, ArrayList<ObjectOutputStream> clientList)
 	{
 		clients = clientList;
 		this.input = input;
-		this.canvas = canvas;
-		System.out.println("Intialized the clients, input, canvas for the client handler");
+		this.paintObject = inputPaintObject;
+		System.out.println("Intialized the clients, input, paintObject for the client handler");
 	}
 
 	@Override
@@ -76,15 +74,8 @@ class ClientHandler extends Thread
 		while (true)
 		{
 			try {
-<<<<<<< HEAD
-				canvas = (Canvas) input.readObject();
-=======
-				Object inputPO;
-				inputPO = input.readObject();
-				canvas.addShape((PaintObject) inputPO);
-				
->>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
-				System.out.println("The canvas was successfully read in");
+				paintObject = (DrawingObjects) input.readObject();
+				System.out.println("The object was successfully read in");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -99,20 +90,15 @@ class ClientHandler extends Thread
 
 	private void updateClientCanvases() {
 		// TODO Auto-generated method stub
-		System.out.println("Trying to write the server's canvas to each client");
+		System.out.println("Trying to write the server's paintObject to each client");
 		for(ObjectOutputStream os : clients){
 			try {
-				os.writeObject(canvas);
-				System.out.println("Server canvas has been written to a client");
+				os.writeObject(paintObject);
+				System.out.println("Server paintObject has been written to a client");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-
-	// TODO (When you get the chance): Write a method that closes all the
-	// resources of a ClientHandler and logs a message, and call it from every
-	// place that a fatal error occurs in ClientHandler (the catch blocks that
-	// you can't recover from).
 }

@@ -12,25 +12,30 @@ public class DrawingObjects implements Serializable
 	
 	public DrawingObjects(Line theLine)
 	{
-		type = line.getObjectType();
+		type = 0;
 		line = theLine;
 	}
 	
 	public DrawingObjects(Rectangle theRectangle)
 	{
-		type = rectangle.getObjectType();
+		type = 1;
 		rectangle = theRectangle;
 	}
 	
 	public DrawingObjects(Oval theOval)
 	{
-		type = oval.getObjectType();
+		type = 2;
 		oval = theOval;
 	}
 	
 	public DrawingObjects(Picture thePicture)
 	{
-		type = picture.getObjectType();
+		type = 3;
 		picture = thePicture;
+	}
+	
+	public int getType()
+	{
+		return type;
 	}
 }
