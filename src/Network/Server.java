@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Canvas;
+<<<<<<< HEAD
+=======
+import PaintObjects.PaintObject;
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 
 public class Server
 {
@@ -72,7 +76,14 @@ class ClientHandler extends Thread
 		while (true)
 		{
 			try {
+<<<<<<< HEAD
 				canvas = (Canvas) input.readObject();
+=======
+				Object inputPO;
+				inputPO = input.readObject();
+				canvas.addShape((PaintObject) inputPO);
+				
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 				System.out.println("The canvas was successfully read in");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block

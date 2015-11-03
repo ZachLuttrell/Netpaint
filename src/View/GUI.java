@@ -61,6 +61,7 @@ public class GUI extends JFrame
 	public Client client;
 	public Server server;
 	
+<<<<<<< HEAD
 //	public static void main(String[] args)
 //	{
 //		new GUI().setVisible(true);
@@ -71,6 +72,18 @@ public class GUI extends JFrame
 		client = theClient;
 		layoutTheGUI();
 		registerListeners();
+=======
+	// public static void main(String[] args)
+	// {
+	//  	new GUI("").setVisible(true);
+	// }
+	
+	public GUI(Client theClient)
+	{
+	client = theClient;
+	layoutTheGUI();
+	registerListeners();
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 	}
 	
 	private void registerListeners()
@@ -202,8 +215,12 @@ public class GUI extends JFrame
 				//Assign start coordinates
 				drawing = true;
 				startPoint.setLocation(e.getX(), e.getY());
+<<<<<<< HEAD
 			
 				
+=======
+
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 				
 				if(line.isSelected())
 				{
@@ -227,6 +244,7 @@ public class GUI extends JFrame
 			{
 				drawing = false;
 				System.out.println("Second Click : Try and update the server canvas");
+<<<<<<< HEAD
 				updateServerCanvas(paintPanel);
 			}
 		}
@@ -237,6 +255,18 @@ public class GUI extends JFrame
 			System.out.println(inputCanvas.getPaintObjects());
 			// server.updateServerCanvas();
 			client.updateServerCanvas(inputCanvas);
+=======
+				updateServerCanvas(paintPanel.getPaintObjects());
+			}
+		}
+
+		private void updateServerCanvas(Object inputPO) {
+			// TODO Auto-generated method stub
+			System.out.println("Trying to push the canvas");
+			System.out.println(inputPO);
+			// server.updateServerCanvas();
+			client.updateServerCanvas(inputPO);
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 		}
 
 		@Override

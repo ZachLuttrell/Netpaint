@@ -27,6 +27,7 @@ public class Client extends JFrame
 
 	public Canvas clientCanvas;
 	public GUI clientGUI;
+<<<<<<< HEAD
 
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
@@ -34,6 +35,16 @@ public class Client extends JFrame
 		theClient = new Client("client_name");
 		theClient.clientGUI = new GUI(theClient);
 		theClient.clientCanvas = theClient.clientGUI.getCanvas();
+=======
+	Client thisClient;
+
+	public static void main(String[] args) throws UnknownHostException, IOException
+	{
+	Client theClient;
+	theClient = new Client("client_name");
+	theClient.clientGUI = new GUI(theClient);
+	theClient.clientCanvas = theClient.clientGUI.getCanvas();
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 	}
 
 	Socket socket;
@@ -66,12 +77,20 @@ public class Client extends JFrame
 		}
 	}
 	
+<<<<<<< HEAD
 	public void updateServerCanvas(Canvas inputCanvas){
 //		clientCanvas = inputCanvas;
 		System.out.println("Trying to write to the server's canvas");
 		System.out.println(inputCanvas);
 		try {
 			oos.writeObject(inputCanvas);
+=======
+	public void updateServerCanvas(Object inputPO){
+		System.out.println("Trying to write to the server's canvas");
+		System.out.println(inputPO);
+		try {
+			oos.writeObject(inputPO);
+>>>>>>> 2772d73c871168fbcee43f643719d40c3ac6aeb3
 			System.out.println("Canvas has been written to server");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
