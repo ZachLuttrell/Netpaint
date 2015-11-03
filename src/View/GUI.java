@@ -61,15 +61,16 @@ public class GUI extends JFrame
 	public Client client;
 	public Server server;
 	
-	public static void main(String[] args)
-	{
-		new GUI().setVisible(true);
-	}
+	// public static void main(String[] args)
+	// {
+	//  	new GUI("").setVisible(true);
+	// }
 	
-	public GUI()
+	public GUI(Client theClient)
 	{
-		layoutTheGUI();
-		registerListeners();
+	client = theClient;
+	layoutTheGUI();
+	registerListeners();
 	}
 	
 	private void registerListeners()
@@ -201,8 +202,7 @@ public class GUI extends JFrame
 				//Assign start coordinates
 				drawing = true;
 				startPoint.setLocation(e.getX(), e.getY());
-			
-				
+
 				
 				if(line.isSelected())
 				{

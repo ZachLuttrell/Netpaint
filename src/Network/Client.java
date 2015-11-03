@@ -25,13 +25,16 @@ public class Client extends JFrame
 {
 	private static final String ADDRESS = "localhost";
 
-	public static Canvas clientCanvas;
-	public static GUI clientGUI;
+	public Canvas clientCanvas;
+	public GUI clientGUI;
+	Client thisClient;
 
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
-		clientGUI = new GUI();
-		clientCanvas = new Canvas(null);
+	Client theClient;
+	theClient = new Client("client_name");
+	theClient.clientGUI = new GUI(theClient);
+	theClient.clientCanvas = theClient.clientGUI.getCanvas();
 	}
 
 	Socket socket;
