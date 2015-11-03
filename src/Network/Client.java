@@ -31,7 +31,7 @@ public class Client extends JFrame
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
 		clientGUI = new GUI();
-		clientCanvas = new Canvas(clientGUI);
+		clientCanvas = new Canvas(null);
 	}
 
 	Socket socket;
@@ -64,10 +64,11 @@ public class Client extends JFrame
 		}
 	}
 	
-	public void updateServerCanvas(){
+	public void updateServerCanvas(Object inputPO){
 		System.out.println("Trying to write to the server's canvas");
+		System.out.println(inputPO);
 		try {
-			oos.writeObject(clientCanvas);
+			oos.writeObject(inputPO);
 			System.out.println("Canvas has been written to server");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

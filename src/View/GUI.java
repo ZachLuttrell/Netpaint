@@ -185,7 +185,12 @@ public class GUI extends JFrame
 		}
 		
 	}
-		
+	
+	public Canvas getCanvas()
+	{
+		return paintPanel;
+	}
+	
 	private class objectCreation implements MouseListener
 	{
 		
@@ -221,15 +226,16 @@ public class GUI extends JFrame
 			{
 				drawing = false;
 				System.out.println("Second Click : Try and update the server canvas");
-				updateServerCanvas();
+				updateServerCanvas(paintPanel.getPaintObjects());
 			}
 		}
 
-		private void updateServerCanvas() {
+		private void updateServerCanvas(Object inputPO) {
 			// TODO Auto-generated method stub
 			System.out.println("Trying to push the canvas");
-			server.updateServerCanvas();
-			// client.updateServerCanvas();
+			System.out.println(inputPO);
+			// server.updateServerCanvas();
+			client.updateServerCanvas(inputPO);
 		}
 
 		@Override

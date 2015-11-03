@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Canvas;
+import PaintObjects.PaintObject;
 
 public class Server
 {
@@ -63,6 +64,7 @@ class ClientHandler extends Thread
 		clients = clientList;
 		this.input = input;
 		this.canvas = canvas;
+		System.out.println("Intialized the clients, input, canvas for the client handler");
 	}
 
 	@Override
@@ -71,7 +73,11 @@ class ClientHandler extends Thread
 		while (true)
 		{
 			try {
-				canvas = (Canvas) input.readObject();
+				Object inputPO;
+				inputPO = input.readObject();
+				canvas.addShape((PaintObject) inputPO);
+				
+				System.out.println("The canvas was successfully read in");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
