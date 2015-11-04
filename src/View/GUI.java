@@ -2,6 +2,7 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
@@ -62,7 +64,7 @@ public class GUI extends JFrame
 	public Client client;
 	public Server server;
 	
-	public DrawingObjects drawObjects;
+	public PaintObject drawObjects;
 	
 	public GUI(Client theClient)
 	{
@@ -147,10 +149,12 @@ public class GUI extends JFrame
 		
 		validate();
 	}
-	
+		
+	//Updates the ghost image of a shape when drawing it
 	private class objectUpdater implements MouseMotionListener {
 
-		private ArrayList<PaintObject> objects;
+		//Store the objects and the current object being drawn
+		private Vector<PaintObject> objects;
 		private PaintObject object;
 		
 		@Override
@@ -159,10 +163,14 @@ public class GUI extends JFrame
 		@Override
 		public void mouseMoved(MouseEvent e) {
 			if(drawing){
+				//Set the ending location of the ghost shape
 				endPoint.setLocation(e.getX(), e.getY());
+				
+				//Get the current object being drawn
 				objects = paintPanel.getPaintObjects();
 				object = objects.get(objects.size()-1);
 				
+				//Depending on the paint object type draw the object accordingly
 				switch(object.getObjectType()){
 				case 0:
 					object.setShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
@@ -172,50 +180,69 @@ public class GUI extends JFrame
 					break;
 				case 2:
 					object.setShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
-					break;
+ 					break;
 				case 3:
 					object.setEndX((int)endPoint.getX()-(int)startPoint.getX());
 					object.setEndY((int)endPoint.getY()-(int)startPoint.getY());
+					object = new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor());
 					break;
 				}
 				
+				//Update the paint panel
 				paintPanel.repaint();
 			}
 		}
-		
 	}
 	
-	public Canvas getCanvas()
-	{
-		return paintPanel;
-	}
+	//Returns the canvas of this GUI
+	public Canvas getCanvas(){ return paintPanel; }
 	
-	public void clientDrawing(DrawingObjects inputDrawObject)
+	//Draws the object passed in to the canvas
+	public void clientDrawing(PaintObject inputDrawObject)
 	{
 		System.out.println("it got into client drawing :)");
-		if(inputDrawObject.getType() == 0)
+		PaintObject inputShape = inputDrawObject;
+		System.out.println(inputShape.getStartX() + ", " + inputShape.getStartY() + ", " + inputShape.getEndX() + ", " + inputShape.getEndY());
+		
+		//Determine the shape and draw it to the canvas
+		if(inputShape.getObjectType() == 0)
 		{
-			paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+		
+			//LINE
+			paintPanel.addShape(new Line(paintPanel.getGraphics(), inputShape.getStartX(), inputShape.getStartY(), inputShape.getEndX(), inputShape.getEndY(), colorChooser.getColor()));
 			paintPanel.setVisible(true);
+			
 			System.out.println("Should have added it to the paint panel/canvas");
+	
 		}
-		else if(inputDrawObject.getType() == 1)
+		else if(inputShape.getObjectType() == 1)
 		{
-			paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+			
+			//RECTANGLE
+			paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), inputShape.getStartX(), inputShape.getStartY(), inputShape.getEndX(), inputShape.getEndY(), colorChooser.getColor()));
 			paintPanel.setVisible(true);
+		
 		}
-		else if(inputDrawObject.getType() == 2)
+		else if(inputShape.getObjectType() == 2)
 		{
-			paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+			
+			//OVAL
+			paintPanel.addShape(new Oval(paintPanel.getGraphics(), inputShape.getStartX(), inputShape.getStartY(), inputShape.getEndX(), inputShape.getEndY(), colorChooser.getColor()));
 			paintPanel.setVisible(true);
+	
 		}
-		else if(inputDrawObject.getType() == 3)
+		else if(inputShape.getObjectType() == 3)
 		{
-			paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
+		
+			//PICTURE
+			paintPanel.addShape(new Picture(paintPanel.getGraphics(), inputShape.getStartX(), inputShape.getStartY(), inputShape.getEndX(), inputShape.getEndY(), colorChooser.getColor()));
 			paintPanel.setVisible(true);
+		
 		}
+		
 		paintPanel.repaint();
-		System.out.println("hopefully it fucking repainted");
+		System.out.println("");
+
 	}
 	
 	private class objectCreation implements MouseListener
@@ -224,72 +251,55 @@ public class GUI extends JFrame
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
+			//First click
 			if(!drawing){
-				//Assign start coordinates
+				
+				//Start drawing the ghost image
 				drawing = true;
+				
+				//Assign start coordinates
 				startPoint.setLocation(e.getX(), e.getY());
 			
+				//Determine which new shape should be added to the collection then add it
 				if(line.isSelected())
 				{
 					paintPanel.addShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					drawObjects = new DrawingObjects(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(rectangle.isSelected())
 				{
 					paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					drawObjects = new DrawingObjects(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(oval.isSelected())
 				{
 					paintPanel.addShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
-					drawObjects = new DrawingObjects(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(image.isSelected())
 				{
 					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
-					drawObjects = new DrawingObjects(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
 				}
 				
 			}
-			else // Second Click
+			//Second click
+			else 
 			{
+				//Stop drawing the ghost image
 				drawing = false;
-				System.out.println("Second Click : Try and update the server canvas");
-				updateServerCanvas(drawObjects);
+				
+				//Shoot the object list out to the server
+				client.updateServerCanvas(paintPanel.getPaintObjects());
 			}
-		}
-
-		private void updateServerCanvas(DrawingObjects inputObject) {
-			// TODO Auto-generated method stub
-			drawObjects = (DrawingObjects) inputObject;
-			System.out.println("Trying to push the canvas");
-			client.updateServerCanvas(drawObjects);
 		}
 		
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
-
-		}
+		public void mousePressed(MouseEvent e){}
 
 		@Override
-		public void mouseReleased(MouseEvent e)
-		{
-
-		}
+		public void mouseReleased(MouseEvent e){}
 
 		@Override
-		public void mouseEntered(MouseEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseEntered(MouseEvent e){}
 
 		@Override
-		public void mouseExited(MouseEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseExited(MouseEvent e){}
 	}
 }

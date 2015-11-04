@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -21,7 +22,11 @@ import com.sun.webkit.ThemeClient;
 
 import Model.Canvas;
 import PaintObjects.DrawingObjects;
+import PaintObjects.Line;
+import PaintObjects.Oval;
 import PaintObjects.PaintObject;
+import PaintObjects.Picture;
+import PaintObjects.Rectangle;
 import View.GUI;
 
 @SuppressWarnings("serial")
@@ -31,7 +36,7 @@ public class Client extends JFrame
 
 	public Canvas clientCanvas;
 	public GUI clientGUI;
-	public DrawingObjects paintObject;
+	public PaintObject paintObject;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
@@ -61,7 +66,6 @@ public class Client extends JFrame
 		try
 		{
 			// TODO 6: Connect to the Server
-
 			socket = new Socket(ADDRESS, Server.SERVER_PORT);
 
 			oos = new ObjectOutputStream(socket.getOutputStream());
@@ -72,40 +76,67 @@ public class Client extends JFrame
 		}
 	}
 	
-	public void updateServerCanvas(DrawingObjects inputObject){
-		paintObject = inputObject;
-		System.out.println("Trying to write the server's object");
-		System.out.println(paintObject);
+	public void updateServerCanvas(Vector<PaintObject> vector){
+		
+		//Try and write the object list out
 		try {
-			oos.writeObject(paintObject);
-			System.out.println("Object has been written to server");
+			oos.reset();
+			oos.writeObject(vector);
+			
+			System.out.println("object list has been written to the server");
+			System.out.println("client writing to server, shape: " + vector.get(0));
+			System.out.println("client writing to server, end x point: " + vector.get(0).getEndX());
 		} catch (IOException e) {
+			
 			// TODO Auto-generated catch block
 			System.out.println("Object didn't make it to server");
 			e.printStackTrace();
+			
 		}
 	}
 
+	//This listener listens for objects being written in and then attempts to draw them to the canvas
 	private class ServerListener extends Thread
 	{
+		
+		public Vector<PaintObject> objectList;
+		
+		@SuppressWarnings("unchecked")
 		@Override
 		public void run()
 		{
+			//Once started run continuously
 			while(true)
 			{
-			try {
-				System.out.println("Trying to read a object from the server");
-				paintObject = (DrawingObjects) ois.readObject();
-				System.out.println("Read it in succesfully");
-				clientGUI.clientDrawing(paintObject);
-				System.out.println("Should be drawn?");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				//If an object list is being written in, read it then draw it to the canvas
+				try {
+					
+					System.out.println("Trying to read an objectList from the server");
+					
+					//Read the objectList in then update this clients list
+					objectList = (Vector<PaintObject>) ois.readObject();
+					clientGUI.getCanvas().setObjectList(objectList);
+					System.out.println("Object list elements: " + objectList.firstElement().getShape());
+					//DEBUG STUFF
+					System.out.println("Read it in succesfully");
+					//System.out.println("drawObjects coordinates: " + paintObject.getStartX() + ", " + paintObject.getStartY() + ", " + paintObject.getEndX() + ", " + paintObject.getEndY());
+					//System.out.println(paintObject.getShape());
+					
+					//Draw the object
+					//clientGUI.clientDrawing(paintObject);
+					
+					//Repaint to show the new object list
+					System.out.println("Should be drawn?");
+					//clientGUI.getCanvas().repaint();
+					System.out.println("Finished repainting");
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

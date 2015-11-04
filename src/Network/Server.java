@@ -7,9 +7,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import Model.Canvas;
 import PaintObjects.DrawingObjects;
+import PaintObjects.Line;
+import PaintObjects.Oval;
+import PaintObjects.PaintObject;
+import PaintObjects.Picture;
+import PaintObjects.Rectangle;
 
 public class Server
 {
@@ -18,8 +24,10 @@ public class Server
 	private static ServerSocket sock;
 	private static Canvas serverCanvas;
 	private static List<ObjectOutputStream> clients = new ArrayList<ObjectOutputStream>();
-	public static DrawingObjects paintObject;
-
+	public DrawingObjects drawObject;
+	public static PaintObject paintObject;
+	public static Vector<PaintObject> objectList;
+	
 	public static void main(String[] args) throws IOException
 	{
 		sock = new ServerSocket(SERVER_PORT);
@@ -39,7 +47,7 @@ public class Server
 			clients.add(os);
 
 			// TODO 3: Start a new ClientHandler thread for this client.
-			ClientHandler clientHandler = new ClientHandler(is, paintObject, (ArrayList<ObjectOutputStream>) clients);
+			ClientHandler clientHandler = new ClientHandler(is, (ArrayList<ObjectOutputStream>) clients);
 			clientHandler.start();
 			
 			System.out.println("Accepted a new connection from " + s.getInetAddress());
@@ -57,25 +65,53 @@ class ClientHandler extends Thread
 {
 
 	ObjectInputStream input;
-	DrawingObjects paintObject;
+	PaintObject drawObject;
 	ArrayList<ObjectOutputStream> clients;
-
-	public ClientHandler(ObjectInputStream input, DrawingObjects inputPaintObject, ArrayList<ObjectOutputStream> clientList)
+	Vector<PaintObject> objectList;
+	int objectType;
+	
+	public ClientHandler(ObjectInputStream input, ArrayList<ObjectOutputStream> clientList)
 	{
 		clients = clientList;
 		this.input = input;
-		this.paintObject = inputPaintObject;
 		System.out.println("Intialized the clients, input, paintObject for the client handler");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run()
 	{
 		while (true)
 		{
+			//Try and read the object list in then update all of the clients on the server.
 			try {
-				paintObject = (DrawingObjects) input.readObject();
+				
+				System.out.println("Waiting to read the object in");
+				
+				//Read the object list in
+				objectList = (Vector<PaintObject>) input.readObject();
+				System.out.println("Server reading it in: " + objectList.get(0));
+				System.out.println("Server read in object end x point: " + objectList.get(0).getEndX());
+				/*int objectType = (int) input.readObject();
+				switch(objectType){
+				case 0:
+					drawObject = (Line) input.readObject();
+					break;
+				case 1:
+					drawObject = (Rectangle) input.readObject();
+					break;
+				case 2:
+					drawObject = (Oval) input.readObject();
+					break;
+				case 3:
+					drawObject = (Picture) input.readObject();
+				}*/
+				
+				//DEBUG STUFF
 				System.out.println("The object was successfully read in");
+				//System.out.println(drawObject.getShape());
+				//System.out.println("drawObjects coordinates: " + drawObject.getStartX() + ", " + drawObject.getStartY() + ", " + drawObject.getEndX() + ", " + drawObject.getEndY());
+
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -84,17 +120,25 @@ class ClientHandler extends Thread
 				e.printStackTrace();
 			}
 			
+			//Update the canvases 
 			updateClientCanvases();
+			
 		}
 	}
 
 	private void updateClientCanvases() {
-		// TODO Auto-generated method stub
-		System.out.println("Trying to write the server's paintObject to each client");
+		System.out.println("Trying to write the server's objectList to each client");
+		//Update each clients list of objects to draw
 		for(ObjectOutputStream os : clients){
 			try {
-				os.writeObject(paintObject);
-				System.out.println("Server paintObject has been written to a client");
+				
+				//Reset output stream
+				os.reset();
+				
+				//Try and write the list out
+				os.writeObject(objectList);
+				System.out.println("Server objectList has been written to a client");
+				System.out.println("The server outputting the shape: " + objectList.get(0).getShape());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

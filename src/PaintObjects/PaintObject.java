@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
+import java.io.Serializable;
 
 public abstract class PaintObject {
 	

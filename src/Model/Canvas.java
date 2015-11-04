@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,12 +17,12 @@ public class Canvas extends JPanel {
 	
 	//FIELDS
 	private GUI gui;
-	private ArrayList<PaintObject> objectsToDraw; //Not sure if it's necessary to add it but it could make things easier later
+	private Vector<PaintObject> objectsToDraw; //Not sure if it's necessary to add it but it could make things easier later
 	private Graphics graphics;
 	
 	public Canvas(GUI inputGUI){
 		gui = inputGUI;
-		objectsToDraw = new ArrayList<PaintObject>();
+		objectsToDraw = new Vector<PaintObject>();
 	}
 	
 	public void addShape(PaintObject object){
@@ -32,7 +33,7 @@ public class Canvas extends JPanel {
 		repaint();
 	}
 	
-	public ArrayList<PaintObject> getPaintObjects(){ return objectsToDraw; }
+	public Vector<PaintObject> getPaintObjects(){ return objectsToDraw; }
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -40,8 +41,10 @@ public class Canvas extends JPanel {
 		if(!objectsToDraw.isEmpty()){
 			for(PaintObject p : objectsToDraw){
 				if(p.getObjectType() < 3){
-				
+			
+					System.out.println(p.getShape());
 					//SHAPE
+					System.out.println("Painting the objects");
 					g2.setColor(p.getColor());
 					g2.draw(p.getShape());
 					g2.fill(p.getShape());
@@ -53,4 +56,9 @@ public class Canvas extends JPanel {
 			}
 		}
 	}
+
+	public void setObjectList(Vector<PaintObject> objectList){ 
+		objectsToDraw = objectList; 
+		repaint();
+		}
 }
