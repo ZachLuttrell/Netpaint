@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,6 +12,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -81,8 +83,14 @@ public class Client extends JFrame
 		//Try and write the object list out
 		try {
 			oos.reset();
-			oos.writeObject(vector);
-			
+			if(vector.get(vector.size() - 1).getObjectType() != 3)
+			{
+				oos.writeObject(vector);
+			}
+			else
+			{
+				ImageIO.write((RenderedImage)vector.get(vector.size() - 1).getImage(), "jpg", oos);
+			}
 			System.out.println("object list has been written to the server");
 			System.out.println("client writing to server, shape: " + vector.get(0));
 			System.out.println("client writing to server, end x point: " + vector.get(0).getEndX());
@@ -116,7 +124,7 @@ public class Client extends JFrame
 					//Read the objectList in then update this clients list
 					objectList = (Vector<PaintObject>) ois.readObject();
 					clientGUI.getCanvas().setObjectList(objectList);
-					System.out.println("Object list elements: " + objectList.firstElement().getShape());
+					//System.out.println("Object list elements: " + objectList.firstElement().getShape());
 					//DEBUG STUFF
 					System.out.println("Read it in succesfully");
 					//System.out.println("drawObjects coordinates: " + paintObject.getStartX() + ", " + paintObject.getStartY() + ", " + paintObject.getEndX() + ", " + paintObject.getEndY());

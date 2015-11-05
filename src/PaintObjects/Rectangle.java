@@ -6,13 +6,19 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-public class Rectangle extends PaintObject {
+public class Rectangle extends PaintObject{
 	
-	private Shape rectangle;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3336858596188902383L;
+	// private Shape rectangle;
+	int width, height;
+	Shape rectangle;
 	
 	public Rectangle(Graphics graphic, int startX, int startY, int endX, int endY, Color color){
 		//Initialize fields
-		super.setGraphics((Graphics2D)graphic);
+		//super.setGraphics(graphic);
 		super.setStartX(startX);
 		super.setStartY(startY);
 		super.setEndX(endX);
@@ -22,11 +28,16 @@ public class Rectangle extends PaintObject {
 		setObjectType(1);
 		
 		//Initialize shape
-		int height, width;
 		height = endY - startY;
 		width = endX - startX;
+		// rectangle = new Rectangle2D.Double(startX, startY, width, height);
+		// super.setShape(rectangle);
+		drawMe();
+	}	
+	
+	public void drawMe()
+	{
 		rectangle = new Rectangle2D.Double(startX, startY, width, height);
 		super.setShape(rectangle);
-		
-	}	
+	}
 }

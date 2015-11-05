@@ -1,5 +1,6 @@
 package Network;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,6 +9,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import javax.imageio.ImageIO;
 
 import Model.Canvas;
 import PaintObjects.DrawingObjects;
@@ -89,7 +92,15 @@ class ClientHandler extends Thread
 				System.out.println("Waiting to read the object in");
 				
 				//Read the object list in
-				objectList = (Vector<PaintObject>) input.readObject();
+				if(input.readObject().equals(drawObject.getObjectType() != 3))
+				{
+					objectList = (Vector<PaintObject>) input.readObject();
+				}
+				else
+				{
+					objectList = (ImageIO.read(input));
+				}
+				// System.out.println(((Vector<PaintObject>) input.readObject()).get(0).getEndX());
 				System.out.println("Server reading it in: " + objectList.get(0));
 				System.out.println("Server read in object end x point: " + objectList.get(0).getEndX());
 				/*int objectType = (int) input.readObject();

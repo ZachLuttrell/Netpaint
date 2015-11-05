@@ -170,20 +170,27 @@ public class GUI extends JFrame
 				objects = paintPanel.getPaintObjects();
 				object = objects.get(objects.size()-1);
 				
+				System.out.println("Object from gui: " + object);
 				//Depending on the paint object type draw the object accordingly
 				switch(object.getObjectType()){
 				case 0:
 					object.setShape(new Line(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
+					object.setEndX(e.getX());
+					object.setEndY(e.getY());
 					break;
 				case 1:
 					object.setShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
+					object.setEndX(e.getX());
+					object.setEndY(e.getY());
 					break;
 				case 2:
 					object.setShape(new Oval(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor()).getShape());
- 					break;
+					object.setEndX(e.getX());
+					object.setEndY(e.getY());
+					break;
 				case 3:
-					object.setEndX((int)endPoint.getX()-(int)startPoint.getX());
-					object.setEndY((int)endPoint.getY()-(int)startPoint.getY());
+					object.setEndX((int)endPoint.getX());
+					object.setEndY((int)endPoint.getY());
 					object = new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)endPoint.getX(), (int)endPoint.getY(), colorChooser.getColor());
 					break;
 				}
@@ -259,7 +266,7 @@ public class GUI extends JFrame
 				
 				//Assign start coordinates
 				startPoint.setLocation(e.getX(), e.getY());
-			
+				
 				//Determine which new shape should be added to the collection then add it
 				if(line.isSelected())
 				{
@@ -267,6 +274,7 @@ public class GUI extends JFrame
 				}
 				else if(rectangle.isSelected())
 				{
+					//System.out.println("Mouse clicked; startx, starty, endx, endy: " + (int)startPoint.getX() + ", " + (int)startPoint.getY() + ", " + (int)startPoint.getX() + ", " + (int)startPoint.getY());
 					paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(oval.isSelected())
@@ -275,9 +283,9 @@ public class GUI extends JFrame
 				}
 				else if(image.isSelected())
 				{
-					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), 0, 0, colorChooser.getColor()));
-				}
-				
+					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+					System.out.println("Mouse Clicked; startX, startY, endX, endY: " + (int)startPoint.getX() + ", " + (int)startPoint.getY() + ", " + (int)startPoint.getX() + ", " + (int)startPoint.getY());
+				}	
 			}
 			//Second click
 			else 

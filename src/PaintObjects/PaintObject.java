@@ -1,14 +1,19 @@
 package PaintObjects;
 import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Shape;
 import java.io.Serializable;
 
-public abstract class PaintObject {
+public abstract class PaintObject implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6023285850692447284L;
 	// FIELDS
-	protected Graphics2D graphic;
+	// protected Graphics2D graphic;
+	protected Graphics graphic;
 	protected int startX, startY, endX, endY;
 	protected Color objectColor;
 	protected Shape shape;
@@ -16,7 +21,8 @@ public abstract class PaintObject {
 	protected int objectType; // 0 = Line, 1 = Rectangle, 2 = Oval, 3 = Image
 	
 	// GETTERS
-	public Graphics2D getGraphic(){ return graphic; }
+	// public Graphics2D getGraphic(){ return graphic; }
+	public Graphics getGraphic(){ return graphic; }
 	public int getStartX(){ return startX; }
 	public int getStartY(){ return startY; }
 	public int getEndX(){ return endX; }
@@ -27,7 +33,8 @@ public abstract class PaintObject {
 	public int getObjectType() { return objectType; }
 	
 	// SETTERS
-	public void setGraphics(Graphics2D g){ graphic = g; }
+	// public void setGraphics(Graphics2D g){ graphic = g; }
+	public void setGraphics(Graphics g){ graphic = g; }
 	public void setStartX(int x){ startX = x; }
 	public void setStartY(int y){ startY = y; }
 	public void setEndX(int x){ endX = x; }
@@ -40,5 +47,7 @@ public abstract class PaintObject {
 	/*public void draw(){
 
 	}*/
+	
+	public abstract void drawMe();
 	
 }

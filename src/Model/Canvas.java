@@ -26,6 +26,7 @@ public class Canvas extends JPanel {
 	}
 	
 	public void addShape(PaintObject object){
+		
 		//Add to the list of objects
 		objectsToDraw.add(object);
 		
@@ -37,22 +38,51 @@ public class Canvas extends JPanel {
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
+		int height, width;
+		// Graphics2D g2 = (Graphics2D) g;
 		if(!objectsToDraw.isEmpty()){
 			for(PaintObject p : objectsToDraw){
-				if(p.getObjectType() < 3){
+				if(p.getObjectType() == 0){
 			
 					System.out.println(p.getShape());
 					//SHAPE
 					System.out.println("Painting the objects");
+					/*
 					g2.setColor(p.getColor());
 					g2.draw(p.getShape());
 					g2.fill(p.getShape());
-				} else {
-				
-					//IMAGE
-					g2.drawImage(p.getImage(), p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY(), null);
+					*/
+					g.setColor(p.getColor());
+					g.drawLine(p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY());
+				} 
+				else if (p.getObjectType() == 1)
+				{
+					height = p.getEndY() - p.getStartY();
+					width = p.getEndX() - p.getStartX();
+					g.setColor(p.getColor());
+					g.drawRect(p.getStartX(), p.getStartY(), width, height);
+					g.fillRect(p.getStartX(), p.getStartY(), width, height);
 				}
+				else if (p.getObjectType() == 2)
+				{
+					g.setColor(p.getColor());
+					height = p.getEndY() - p.getStartY();
+					width = p.getEndX() - p.getStartX();
+					g.drawOval(p.getStartX(), p.getStartY(), width, height);
+					g.fillOval(p.getStartX(), p.getStartY(), width, height);				
+				}
+				else 
+				{
+					//IMAGE
+					//g2.drawImage(p.getImage(), p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY(), null);
+					height = p.getEndY() - p.getStartY();
+					width = p.getEndX() - p.getStartX();
+					g.drawImage(p.getImage(), p.getStartX(), p.getStartY(), width, height, null);
+					System.out.println("Paint component: startX, startY, width, height: " + p.getStartX() + ", " + p.getStartY() + ", " + width + ", " + height);
+					System.out.println("Paint component: startX, startY, endX, endY: " + p.getStartX() + ", " + p.getStartY() + ", " + p.getEndX() + ", " + p.getEndY());
+				}
+				System.out.println("Maybe it is drawing");
+				System.out.println("FUCK THIS FUCKING PROJECT");
 			}
 		}
 	}

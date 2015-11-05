@@ -5,14 +5,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 
-public class Oval extends PaintObject {
+public class Oval extends PaintObject{
 
-	private Shape oval;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4820349760586267402L;
+	// private Shape oval;
+	int height, width;
 	
 	public Oval(Graphics graphic, int startX, int startY, int endX, int endY, Color color){
 		//Initialize fields
-		super.setGraphics((Graphics2D)graphic);
+		//super.setGraphics(graphic);
 		super.setStartX(startX);
 		super.setStartY(startY);
 		super.setEndX(endX);
@@ -22,9 +28,15 @@ public class Oval extends PaintObject {
 		super.setObjectType(2);
 		
 		//Initialize shape
-		int height, width;
+		
 		height = endY - startY;
 		width = endX - startX;
+	}
+	
+	public void drawMe()
+	{
+		Shape oval;
+		
 		oval = new Ellipse2D.Double(startX, startY, width, height);
 		super.setShape(oval);
 	}
