@@ -20,7 +20,7 @@ public class Line extends PaintObject implements Serializable{
 		super.setEndX(endX);
 		super.setEndY(endY);
 		super.setColor(color);
-		super.setImage(null);
+		// super.setImage(null);
 		super.setObjectType(0);
 		
 		//Initialize shape

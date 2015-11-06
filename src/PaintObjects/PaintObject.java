@@ -17,7 +17,7 @@ public abstract class PaintObject implements Serializable{
 	protected int startX, startY, endX, endY;
 	protected Color objectColor;
 	protected Shape shape;
-	protected Image image;
+	// protected Image image;
 	protected int objectType; // 0 = Line, 1 = Rectangle, 2 = Oval, 3 = Image
 	
 	// GETTERS
@@ -29,7 +29,7 @@ public abstract class PaintObject implements Serializable{
 	public int getEndY(){ return endY; }
 	public Color getColor(){ return objectColor; }
 	public Shape getShape(){ return shape; }
-	public Image getImage(){ return image; }
+	// public Image getImage(){ return image; }
 	public int getObjectType() { return objectType; }
 	
 	// SETTERS
@@ -41,7 +41,7 @@ public abstract class PaintObject implements Serializable{
 	public void setEndY(int y){ endY = y; }
 	public void setColor(Color c){ objectColor = c; }
 	public void setShape(Shape s){ shape = s; }
-	public void setImage(Image i){ image = i; }
+	// public void setImage(Image i){ image = i; }
 	public void setObjectType(int type){ objectType = type; }
 	//FUNCTIONALITY
 	/*public void draw(){

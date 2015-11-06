@@ -51,6 +51,6 @@ public class Picture extends PaintObject implements Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		super.setImage(image);
+		// super.setImage(image);
 	}
 }

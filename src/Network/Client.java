@@ -5,9 +5,11 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.RenderedImage;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Vector;
@@ -39,13 +41,21 @@ public class Client extends JFrame
 	public Canvas clientCanvas;
 	public GUI clientGUI;
 	public PaintObject paintObject;
+	public static Boolean isOpen;
 	
 	public static void main(String[] args) throws UnknownHostException, IOException
 	{
 		Client theClient;
 		theClient = new Client();
-		theClient.clientGUI = new GUI(theClient);
-		theClient.clientCanvas = theClient.clientGUI.getCanvas();
+		if(isOpen)
+		{
+			theClient.clientGUI = new GUI(theClient);
+			theClient.clientCanvas = theClient.clientGUI.getCanvas();
+		}
+		else
+		{
+			System.out.println("No server is available, closing client");
+		}
 	}
 
 	Socket socket;
@@ -54,15 +64,23 @@ public class Client extends JFrame
 
 	public Client() throws UnknownHostException, IOException
 	{
-		openConnection();
+		isOpen = openConnection();
 
-		// TODO 7: Start a new ServerListener thread
-		ServerListener s = new ServerListener();
-		s.start();
-		System.out.println("Server Listener Started");
-	}
+		if(isOpen)
+		{
+			// TODO 7: Start a new ServerListener thread
+			ServerListener s = new ServerListener();
+			s.start();
 	
-	private void openConnection()
+			System.out.println("Server Listener Started");
+		}
+		else
+		{
+			System.out.println("Unable to open connection");
+		}
+	}
+
+	private boolean openConnection()
 	{
 		/* Our server is on our computer, but make sure to use the same port. */
 		try
@@ -72,43 +90,41 @@ public class Client extends JFrame
 
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
+			return true;
+		} catch (ConnectException e) {
+			return false;
 		} catch (IOException e)
 		{
 			e.printStackTrace();
-		}
+			return false;
+		} 
 	}
-	
-	public void updateServerCanvas(Vector<PaintObject> vector){
-		
-		//Try and write the object list out
-		try {
+
+	public void updateServerCanvas(Vector<PaintObject> vector)
+	{
+
+		// Try and write the object list out
+		try
+		{
 			oos.reset();
-			if(vector.get(vector.size() - 1).getObjectType() != 3)
-			{
-				oos.writeObject(vector);
-			}
-			else
-			{
-				ImageIO.write((RenderedImage)vector.get(vector.size() - 1).getImage(), "jpg", oos);
-			}
-			System.out.println("object list has been written to the server");
-			System.out.println("client writing to server, shape: " + vector.get(0));
-			System.out.println("client writing to server, end x point: " + vector.get(0).getEndX());
-		} catch (IOException e) {
-			
+			oos.writeObject(vector);
+
+		} catch (IOException e)
+		{
+
 			// TODO Auto-generated catch block
 			System.out.println("Object didn't make it to server");
 			e.printStackTrace();
-			
+
 		}
 	}
 
-	//This listener listens for objects being written in and then attempts to draw them to the canvas
+	// This listener listens for objects being written in and then attempts to
+	// draw them to the canvas
 	private class ServerListener extends Thread
 	{
-		
 		public Vector<PaintObject> objectList;
-		
+
 		@SuppressWarnings("unchecked")
 		@Override
 		public void run()
@@ -118,26 +134,29 @@ public class Client extends JFrame
 			{
 				//If an object list is being written in, read it then draw it to the canvas
 				try {
-					
 					System.out.println("Trying to read an objectList from the server");
 					
 					//Read the objectList in then update this clients list
 					objectList = (Vector<PaintObject>) ois.readObject();
-					clientGUI.getCanvas().setObjectList(objectList);
-					//System.out.println("Object list elements: " + objectList.firstElement().getShape());
-					//DEBUG STUFF
-					System.out.println("Read it in succesfully");
-					//System.out.println("drawObjects coordinates: " + paintObject.getStartX() + ", " + paintObject.getStartY() + ", " + paintObject.getEndX() + ", " + paintObject.getEndY());
-					//System.out.println(paintObject.getShape());
-					
-					//Draw the object
-					//clientGUI.clientDrawing(paintObject);
-					
-					//Repaint to show the new object list
-					System.out.println("Should be drawn?");
-					//clientGUI.getCanvas().repaint();
-					System.out.println("Finished repainting");
-					
+					if(objectList != null)
+					{
+						clientGUI.getCanvas().setObjectList(objectList);
+
+						//DEBUG STUFF
+						System.out.println("Read it in succesfully");
+						
+						//Repaint to show the new object list
+					}
+					else
+					{
+						System.out.println("There was no Objects to paint");
+					}
+				} catch (EOFException e) {
+					clientClose();
+					System.out.println("Closing client, server was disconnected");
+					clientGUI.setVisible(false); // Hide the window
+					clientGUI.dispose(); // Destroy the window
+					return;
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -146,6 +165,29 @@ public class Client extends JFrame
 					e.printStackTrace();
 				}
 			}
+	}
+
+}
+
+	public void clientClose()
+	{
+		try
+		{
+			oos.close();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		try
+		{
+			ois.close();
+
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

@@ -2,11 +2,15 @@ package Model;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -47,11 +51,7 @@ public class Canvas extends JPanel {
 					System.out.println(p.getShape());
 					//SHAPE
 					System.out.println("Painting the objects");
-					/*
-					g2.setColor(p.getColor());
-					g2.draw(p.getShape());
-					g2.fill(p.getShape());
-					*/
+
 					g.setColor(p.getColor());
 					g.drawLine(p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY());
 				} 
@@ -77,12 +77,14 @@ public class Canvas extends JPanel {
 					//g2.drawImage(p.getImage(), p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY(), null);
 					height = p.getEndY() - p.getStartY();
 					width = p.getEndX() - p.getStartX();
-					g.drawImage(p.getImage(), p.getStartX(), p.getStartY(), width, height, null);
-					System.out.println("Paint component: startX, startY, width, height: " + p.getStartX() + ", " + p.getStartY() + ", " + width + ", " + height);
-					System.out.println("Paint component: startX, startY, endX, endY: " + p.getStartX() + ", " + p.getStartY() + ", " + p.getEndX() + ", " + p.getEndY());
+					Image image = null;
+					try {
+						image = ImageIO.read(new File("Image/GratefulDeadSkeleton.jpg"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					g.drawImage(image, p.getStartX(), p.getStartY(), width, height, null);
 				}
-				System.out.println("Maybe it is drawing");
-				System.out.println("FUCK THIS FUCKING PROJECT");
 			}
 		}
 	}

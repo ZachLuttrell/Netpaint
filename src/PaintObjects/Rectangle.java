@@ -24,7 +24,7 @@ public class Rectangle extends PaintObject{
 		super.setEndX(endX);
 		super.setEndY(endY);
 		super.setColor(color);
-		super.setImage(null);
+		// super.setImage(null);
 		setObjectType(1);
 		
 		//Initialize shape

@@ -1,6 +1,7 @@
 package Network;
 
 import java.awt.image.BufferedImage;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,6 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 
@@ -29,7 +31,7 @@ public class Server
 	private static List<ObjectOutputStream> clients = new ArrayList<ObjectOutputStream>();
 	public DrawingObjects drawObject;
 	public static PaintObject paintObject;
-	public static Vector<PaintObject> objectList;
+	public static Vector<PaintObject> mainObjectList;
 	
 	public static void main(String[] args) throws IOException
 	{
@@ -50,33 +52,29 @@ public class Server
 			clients.add(os);
 
 			// TODO 3: Start a new ClientHandler thread for this client.
-			ClientHandler clientHandler = new ClientHandler(is, (ArrayList<ObjectOutputStream>) clients);
+			ClientHandler clientHandler = new ClientHandler(is, (ArrayList<ObjectOutputStream>) clients, os);
 			clientHandler.start();
 			
-			System.out.println("Accepted a new connection from " + s.getInetAddress());
 			
+			System.out.println("Accepted a new connection from " + s.getInetAddress());
 		}
-	}
-
-	public void updateServerCanvas() {
-		// TODO Auto-generated method stub
-		
 	}
 }
 
-class ClientHandler extends Thread
+class ClientHandler<T> extends Thread
 {
-
 	ObjectInputStream input;
 	PaintObject drawObject;
 	ArrayList<ObjectOutputStream> clients;
 	Vector<PaintObject> objectList;
 	int objectType;
+	ObjectOutputStream output;
 	
-	public ClientHandler(ObjectInputStream input, ArrayList<ObjectOutputStream> clientList)
+	public ClientHandler(ObjectInputStream input, ArrayList<ObjectOutputStream> clientList, ObjectOutputStream theOS)
 	{
 		clients = clientList;
 		this.input = input;
+		this.output = theOS;
 		System.out.println("Intialized the clients, input, paintObject for the client handler");
 	}
 
@@ -84,6 +82,7 @@ class ClientHandler extends Thread
 	@Override
 	public void run()
 	{
+		updateClientCanvases();
 		while (true)
 		{
 			//Try and read the object list in then update all of the clients on the server.
@@ -92,44 +91,31 @@ class ClientHandler extends Thread
 				System.out.println("Waiting to read the object in");
 				
 				//Read the object list in
-				if(input.readObject().equals(drawObject.getObjectType() != 3))
-				{
-					objectList = (Vector<PaintObject>) input.readObject();
-				}
-				else
-				{
-					objectList = (ImageIO.read(input));
-				}
-				// System.out.println(((Vector<PaintObject>) input.readObject()).get(0).getEndX());
-				System.out.println("Server reading it in: " + objectList.get(0));
-				System.out.println("Server read in object end x point: " + objectList.get(0).getEndX());
-				/*int objectType = (int) input.readObject();
-				switch(objectType){
-				case 0:
-					drawObject = (Line) input.readObject();
-					break;
-				case 1:
-					drawObject = (Rectangle) input.readObject();
-					break;
-				case 2:
-					drawObject = (Oval) input.readObject();
-					break;
-				case 3:
-					drawObject = (Picture) input.readObject();
-				}*/
-				
-				//DEBUG STUFF
+				objectList = (Vector<PaintObject>) input.readObject();
+								
 				System.out.println("The object was successfully read in");
-				//System.out.println(drawObject.getShape());
-				//System.out.println("drawObjects coordinates: " + drawObject.getStartX() + ", " + drawObject.getStartY() + ", " + drawObject.getEndX() + ", " + drawObject.getEndY());
 
+			} catch (EOFException e) {
+				System.out.println("EOFException terminating this client");
+				int i = 0;
+				for(ObjectOutputStream os : clients)
+				{
+					if(os == output)
+					{
+						clients.remove(i);
+						System.out.println("Found the client and removed it");
+						break;
+					}
+					++i;
+				}
+				return;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 			
 			//Update the canvases 
 			updateClientCanvases();
@@ -137,22 +123,23 @@ class ClientHandler extends Thread
 		}
 	}
 
-	private void updateClientCanvases() {
+	public void updateClientCanvases() {
 		System.out.println("Trying to write the server's objectList to each client");
 		//Update each clients list of objects to draw
-		for(ObjectOutputStream os : clients){
-			try {
-				
-				//Reset output stream
-				os.reset();
-				
-				//Try and write the list out
-				os.writeObject(objectList);
-				System.out.println("Server objectList has been written to a client");
-				System.out.println("The server outputting the shape: " + objectList.get(0).getShape());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if(objectList != null)
+		{
+			for(ObjectOutputStream os : clients){
+				try {	
+					//Reset output stream
+					os.reset();
+					
+					//Try and write the list out
+					os.writeObject(objectList);
+					System.out.println("Server objectList has been written to a client");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

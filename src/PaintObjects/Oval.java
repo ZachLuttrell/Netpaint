@@ -24,7 +24,7 @@ public class Oval extends PaintObject{
 		super.setEndX(endX);
 		super.setEndY(endY);
 		super.setColor(color);
-		super.setImage(null);
+		// super.setImage(null);
 		super.setObjectType(2);
 		
 		//Initialize shape
