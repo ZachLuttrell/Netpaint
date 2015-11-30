@@ -170,6 +170,7 @@ public class GUI extends JFrame
 				objects = paintPanel.getPaintObjects();
 				object = objects.get(objects.size()-1);
 				
+				System.out.println("Object from gui: " + object);
 				//Depending on the paint object type draw the object accordingly
 				switch(object.getObjectType()){
 				case 0:
@@ -206,6 +207,7 @@ public class GUI extends JFrame
 	//Draws the object passed in to the canvas
 	public void clientDrawing(PaintObject inputDrawObject)
 	{
+		System.out.println("it got into client drawing :)");
 		PaintObject inputShape = inputDrawObject;
 		System.out.println(inputShape.getStartX() + ", " + inputShape.getStartY() + ", " + inputShape.getEndX() + ", " + inputShape.getEndY());
 		
@@ -215,7 +217,10 @@ public class GUI extends JFrame
 		
 			//LINE
 			paintPanel.addShape(new Line(paintPanel.getGraphics(), inputShape.getStartX(), inputShape.getStartY(), inputShape.getEndX(), inputShape.getEndY(), colorChooser.getColor()));
-			paintPanel.setVisible(true);	
+			paintPanel.setVisible(true);
+			
+			System.out.println("Should have added it to the paint panel/canvas");
+	
 		}
 		else if(inputShape.getObjectType() == 1)
 		{
@@ -269,6 +274,7 @@ public class GUI extends JFrame
 				}
 				else if(rectangle.isSelected())
 				{
+					//System.out.println("Mouse clicked; startx, starty, endx, endy: " + (int)startPoint.getX() + ", " + (int)startPoint.getY() + ", " + (int)startPoint.getX() + ", " + (int)startPoint.getY());
 					paintPanel.addShape(new Rectangle(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
 				}
 				else if(oval.isSelected())
@@ -278,6 +284,7 @@ public class GUI extends JFrame
 				else if(image.isSelected())
 				{
 					paintPanel.addShape(new Picture(paintPanel.getGraphics(), (int)startPoint.getX(), (int)startPoint.getY(), (int)startPoint.getX(), (int)startPoint.getY(), colorChooser.getColor()));
+					System.out.println("Mouse Clicked; startX, startY, endX, endY: " + (int)startPoint.getX() + ", " + (int)startPoint.getY() + ", " + (int)startPoint.getX() + ", " + (int)startPoint.getY());
 				}	
 			}
 			//Second click
@@ -287,6 +294,8 @@ public class GUI extends JFrame
 				drawing = false;
 				
 				//Shoot the object list out to the server
+				System.out.println("Before sending the paint objects: "+ paintPanel.getPaintObjects());
+				System.out.println("client is: " + client);
 				client.updateServerCanvas(paintPanel.getPaintObjects());
 			}
 		}

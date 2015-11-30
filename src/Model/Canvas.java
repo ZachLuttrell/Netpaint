@@ -51,7 +51,11 @@ public class Canvas extends JPanel {
 					System.out.println(p.getShape());
 					//SHAPE
 					System.out.println("Painting the objects");
-
+					/*
+					g2.setColor(p.getColor());
+					g2.draw(p.getShape());
+					g2.fill(p.getShape());
+					*/
 					g.setColor(p.getColor());
 					g.drawLine(p.getStartX(), p.getStartY(), p.getEndX(), p.getEndY());
 				} 
@@ -84,7 +88,11 @@ public class Canvas extends JPanel {
 						e.printStackTrace();
 					}
 					g.drawImage(image, p.getStartX(), p.getStartY(), width, height, null);
+					System.out.println("Paint component: startX, startY, width, height: " + p.getStartX() + ", " + p.getStartY() + ", " + width + ", " + height);
+					System.out.println("Paint component: startX, startY, endX, endY: " + p.getStartX() + ", " + p.getStartY() + ", " + p.getEndX() + ", " + p.getEndY());
 				}
+				System.out.println("Maybe it is drawing");
+				System.out.println("FUCK THIS FUCKING PROJECT");
 			}
 		}
 	}
